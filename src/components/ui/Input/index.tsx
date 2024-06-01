@@ -1,13 +1,13 @@
 import styles from "./Input.module.scss";
 
-type Propstype = {
+type Propstypes = {
   label?: string;
   name: string;
   placeholder?: string;
   type: string;
 };
 
-const Input = (props: Propstype) => {
+const Input = (props: Propstypes) => {
   const { label, name, type, placeholder } = props;
 
   return (

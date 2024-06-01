@@ -1,6 +1,6 @@
 import styles from "./Button.module.scss";
 
-type Propstype = {
+type Propstypes = {
   type: "button" | "submit" | "reset" | undefined;
   onClick?: () => void;
   children: React.ReactNode;
@@ -8,7 +8,7 @@ type Propstype = {
   className?: string;
 };
 
-const Button = (props: Propstype) => {
+const Button = (props: Propstypes) => {
   const { type, onClick, children, variant = "primary", className } = props;
   return (
     <div className={styles.login__form__other}>
