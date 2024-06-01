@@ -7,8 +7,8 @@ import { useSession } from "next-auth/react";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const {data}=useSession();
-  
+  const { data } = useSession();
+  console.log(data);
   return (
     <>
       <Head>
