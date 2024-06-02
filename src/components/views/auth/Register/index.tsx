@@ -23,13 +23,14 @@ const RegisterView = () => {
       password: form.password.value,
     };
 
-    const result = await authServices.registerAccount(data);
-
-    if (result.status === 200) {
-      form.reset();
-      setIsloading(false);
-      push("/auth/login");
-    } else {
+    try {
+      const result = await authServices.registerAccount(data);
+      if (result.status === 200) {
+        form.reset();
+        setIsloading(false);
+        push("/auth/login");
+      }
+    } catch (error) {
       setIsloading(false);
       setError("Email is already registered");
     }
