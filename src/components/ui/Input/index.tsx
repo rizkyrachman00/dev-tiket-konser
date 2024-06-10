@@ -1,14 +1,16 @@
 import styles from "./Input.module.scss";
 
-type Propstypes = {
+type Proptypes = {
   label?: string;
   name: string;
   placeholder?: string;
   type: string;
+  defaultValue?: string;
+  disabled?: boolean;
 };
 
-const Input = (props: Propstypes) => {
-  const { label, name, type, placeholder } = props;
+const Input = (props: Proptypes) => {
+  const { label, name, type, placeholder, defaultValue, disabled } = props;
 
   return (
     <div className={styles.container}>
@@ -19,6 +21,8 @@ const Input = (props: Propstypes) => {
         className={styles.container__input}
         type={type}
         placeholder={placeholder}
+        defaultValue={defaultValue}
+        disabled={disabled}
       />
     </div>
   );
