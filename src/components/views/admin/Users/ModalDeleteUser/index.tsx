@@ -3,22 +3,51 @@ import userServices from "@/services/user";
 import Modal from "@/components/ui/Modal";
 import styles from "./ModalDeleteUser.module.scss";
 import { useSession } from "next-auth/react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { User } from "@/types/user.type";
 
-const ModalDeleteUser = (props: any) => {
-  const { deletedUser, setDeletedUser, setUsersData } = props;
-  const session: any = useSession();
+type PropTypes = {
+  setUsersData: Dispatch<SetStateAction<User[]>>;
+  setToaster: Dispatch<SetStateAction<{}>>;
+  deletedUser: User | any;
+  setDeletedUser: Dispatch<SetStateAction<{}>>;
+  session: any;
+};
+
+const ModalDeleteUser = (props: PropTypes) => {
+  const { deletedUser, setDeletedUser, setUsersData, setToaster, session } =
+    props;
+  const [isLoading, setIsloading] = useState(false);
 
   const handleDelete = async () => {
-    userServices.deleteUser(deletedUser.id, session.data?.accessToken);
-    setDeletedUser({});
-    const { data } = await userServices.getAllUsers();
-    setUsersData(data.data);
+    try {
+      const result = await userServices.deleteUser(
+        deletedUser.id,
+        session.data?.accessToken
+      );
+      if (result.status === 200) {
+        setIsloading(false);
+        setToaster({
+          variant: "success",
+          message: "Success Delete User",
+        });
+        setDeletedUser({});
+        const { data } = await userServices.getAllUsers();
+        setUsersData(data.data);
+      }
+    } catch (error) {
+      setIsloading(false);
+      setToaster({
+        variant: "danger",
+        message: "Failed Delete User",
+      });
+    }
   };
   return (
     <Modal onClose={() => setDeletedUser({})}>
       <h1 className={styles.modal__title}>Are you sure to delete this user?</h1>
       <Button type="button" onClick={() => handleDelete()}>
-        Delete
+        {isLoading ? "Deleting..." : "Yes, Delete"}
       </Button>
     </Modal>
   );

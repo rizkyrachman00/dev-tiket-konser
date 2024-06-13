@@ -5,10 +5,21 @@ import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import userServices from "@/services/user";
 import { useSession } from "next-auth/react";
+import { Dispatch, SetStateAction } from "react";
+import { User } from "@/types/user.type";
 
-const ModalUpdateUser = (props: any) => {
-  const { updatedUser, setUpdatedUser, setUsersData } = props;
-  const session: any = useSession();
+type PropTypes = {
+  setUsersData: Dispatch<SetStateAction<User[]>>;
+  setToaster: Dispatch<SetStateAction<{}>>;
+  updatedUser: User | any;
+  setUpdatedUser: Dispatch<SetStateAction<{}>>;
+  session: any;
+};
+
+const ModalUpdateUser = (props: PropTypes) => {
+  const { updatedUser, setUpdatedUser, setUsersData, setToaster, session } =
+    props;
+
   const [isLoading, setIsloading] = useState(false);
   const handleUpdateUser = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -17,20 +28,29 @@ const ModalUpdateUser = (props: any) => {
     const data = {
       role: form.role.value,
     };
-    const result = await userServices.updateUser(
-      updatedUser.id,
-      data,
-      session.data?.accessToken
-    );
+
     try {
+      const result = await userServices.updateUser(
+        updatedUser.id,
+        data,
+        session.data?.accessToken
+      );
       if (result.status === 200) {
         setIsloading(false);
         setUpdatedUser({});
         const { data } = await userServices.getAllUsers();
         setUsersData(data.data);
+        setToaster({
+          variant: "success",
+          message: "Success Update User",
+        });
       }
     } catch (error) {
       setIsloading(false);
+      setToaster({
+        variant: "danger",
+        message: "Failed Update User",
+      });
     }
   };
   return (
@@ -67,7 +87,7 @@ const ModalUpdateUser = (props: any) => {
             { label: "Admin", value: "admin" },
           ]}
         />
-        <Button type="submit">Update</Button>
+        <Button type="submit">{isLoading ? "Loading..." : "Update"}</Button>
       </form>
     </Modal>
   );

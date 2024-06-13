@@ -6,16 +6,25 @@ type Propstypes = {
   children: React.ReactNode;
   variant?: string;
   className?: string;
+  disabled?: boolean;
 };
 
 const Button = (props: Propstypes) => {
-  const { type, onClick, children, variant = "primary", className } = props;
+  const {
+    type,
+    onClick,
+    children,
+    variant = "primary",
+    className,
+    disabled,
+  } = props;
   return (
     <div className={styles.login__form__other}>
       <button
         type={type}
         onClick={onClick}
         className={`${styles.button} ${styles[variant]} ${className}`}
+        disabled={disabled}
       >
         {children}
       </button>

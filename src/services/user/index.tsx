@@ -1,5 +1,5 @@
 import instance from "@/lib/axios/instance";
-import { deleteUser } from "firebase/auth";
+import { deleteUser, updateProfile } from "firebase/auth";
 
 const userServices = {
   getAllUsers: () => instance.get("/api/user"),
@@ -19,6 +19,22 @@ const userServices = {
         Authorization: `Bearer ${token}`,
       },
     }),
+  getProfile: (token: string) =>
+    instance.get("/api/user/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  updateProfile: (data: any, token: string) =>
+    instance.put(
+      `/api/user/profile`,
+      { data },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ),
 };
 
 export default userServices;
