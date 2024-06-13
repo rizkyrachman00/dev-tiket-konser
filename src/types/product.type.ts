@@ -1,7 +1,7 @@
 export type Product = {
   id: string;
   name: string;
-  genres: Array<string>;
+  genres: Array<[]>;
   region: string;
   prices: [{ category: string; idr: number }];
   stocks: [{ category: string; qty: number }];
