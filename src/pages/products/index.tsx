@@ -1,13 +1,13 @@
-import ProductsAdminView from "@/components/views/admin/Products";
+import ProductView from "@/components/views/products";
+import Head from "next/head";
+import { useState, useEffect } from "react";
 import productServices from "@/services/product";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 
 type PropTypes = {
   setToaster: any;
 };
 
-const AdminProductsPage = (props: PropTypes) => {
+const ProductPage = (props: PropTypes) => {
   const { setToaster } = props;
   const [products, setProducts] = useState([]);
   const getAllProducts = async () => {
@@ -17,12 +17,14 @@ const AdminProductsPage = (props: PropTypes) => {
   useEffect(() => {
     getAllProducts();
   }, []);
-
   return (
     <>
-      <ProductsAdminView products={products} setToaster={setToaster} />
+      <Head>
+        <title>Products</title>
+      </Head>
+      <ProductView products={products} />
     </>
   );
 };
 
-export default AdminProductsPage;
+export default ProductPage;
