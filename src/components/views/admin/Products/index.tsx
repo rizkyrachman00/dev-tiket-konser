@@ -1,7 +1,7 @@
 import AdminLayout from "@/components/layouts/AdminLayout";
 import Button from "@/components/ui/Button";
 import styles from "./Products.module.scss";
-import { Dispatch, useEffect, useState, SetStateAction } from "react";
+import { Dispatch, useEffect, useState, SetStateAction, Fragment } from "react";
 import { User } from "@/types/user.type";
 import Image from "next/image";
 import { convertIDR } from "@/utils/currency";
@@ -59,8 +59,8 @@ const ProductsAdminView = (props: PropTypes) => {
             </thead>
             <tbody>
               {productsData.map((product, index) => (
-                <>
-                  <tr key={product.id}>
+                <Fragment key={product.id}>
+                  <tr>
                     <td
                       rowSpan={product.prices.length && product.stocks.length}
                     >
@@ -86,9 +86,9 @@ const ProductsAdminView = (props: PropTypes) => {
                       rowSpan={product.prices.length && product.stocks.length}
                     >
                       {product.genres.map((genre: [], index: number) => (
-                        <>
-                          <p key={index}>{`${genre},`}</p>
-                        </>
+                        <Fragment key={index}>
+                          <p>{`${genre},`}</p>
+                        </Fragment>
                       ))}
                     </td>
                     <td
@@ -126,19 +126,19 @@ const ProductsAdminView = (props: PropTypes) => {
                       prices: { category: string; idr: number },
                       index: number
                     ) => (
-                      <>
+                      <Fragment key={`${prices.category}-${index}`}>
                         {index > 0 && product.stocks[index] && (
-                          <tr key={`${prices.category}-${index}`}>
+                          <tr>
                             <td>{prices.category}</td>
                             <td>{convertIDR(prices.idr)}</td>
                             <td>{product.stocks[index].category}</td>
                             <td>{product.stocks[index].qty}</td>
                           </tr>
                         )}
-                      </>
+                      </Fragment>
                     )
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>

@@ -5,24 +5,32 @@ import Button from "@/components/ui/Button";
 import Image from "next/image";
 import { uploadFile } from "@/lib/firebase/service";
 import userServices from "@/services/user";
-import { useState, Dispatch, SetStateAction, FormEvent } from "react";
+import {
+  useState,
+  Dispatch,
+  SetStateAction,
+  FormEvent,
+  useEffect,
+} from "react";
 import { User } from "@/types/user.type";
 
 type PropTypes = {
-  profile: User | any;
-  setProfile: Dispatch<SetStateAction<any>>;
-  session: any;
   setToaster: Dispatch<SetStateAction<{}>>;
 };
 
-const ProfileMemberView = ({
-  profile,
-  setProfile,
-  session,
-  setToaster,
-}: PropTypes) => {
+const ProfileMemberView = ({ setToaster }: PropTypes) => {
+  const [profile, setProfile] = useState<User | any>({});
   const [changeImage, setChangeImage] = useState<File | any>({});
   const [isLoading, setIsloading] = useState("");
+
+  const getProfile = async () => {
+    const { data } = await userServices.getProfile();
+    setProfile(data.data);
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   const handleChangeProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,10 +40,7 @@ const ProfileMemberView = ({
       fullname: form.fullname.value,
       phone: form.phone.value,
     };
-    const result = await userServices.updateProfile(
-      data,
-      session.data?.accessToken
-    );
+    const result = await userServices.updateProfile(data);
     try {
       if (result.status === 200) {
         setIsloading("");
@@ -72,10 +77,7 @@ const ProfileMemberView = ({
             const data = {
               image: newImageURL,
             };
-            const result = await userServices.updateProfile(
-              data,
-              session.data?.accessToken
-            );
+            const result = await userServices.updateProfile(data);
             try {
               if (result.status === 200) {
                 setIsloading("");
@@ -116,10 +118,7 @@ const ProfileMemberView = ({
       encryptedPassword: profile.password,
     };
     try {
-      const result = await userServices.updateProfile(
-        data,
-        session.data?.accessToken
-      );
+      const result = await userServices.updateProfile(data);
 
       if (result.status === 200) {
         setIsloading("");
@@ -201,12 +200,16 @@ const ProfileMemberView = ({
             <h2 className={styles.profile__main__row__profile__title}>
               Profile
             </h2>
-            <form onSubmit={handleChangeProfile}>
+            <form
+              onSubmit={handleChangeProfile}
+              className={styles.profile__main__row__profile__form}
+            >
               <Input
                 label="Fullname"
                 type="text"
                 name="fullname"
                 defaultValue={profile.fullname}
+                className={styles.profile__main__row__profile__form__input}
               />
               <Input
                 label="Phone"
@@ -214,6 +217,7 @@ const ProfileMemberView = ({
                 name="phone"
                 defaultValue={profile.phone}
                 placeholder="Input your phone number"
+                className={styles.profile__main__row__profile__form__input}
               />
               <Input
                 label="Email"
@@ -221,6 +225,7 @@ const ProfileMemberView = ({
                 name="email"
                 defaultValue={profile.email}
                 disabled
+                className={styles.profile__main__row__profile__form__input}
               />
               <Input
                 label="Role"
@@ -228,6 +233,7 @@ const ProfileMemberView = ({
                 name="role"
                 defaultValue={profile.role}
                 disabled
+                className={styles.profile__main__row__profile__form__input}
               />
 
               <Button type="submit" variant="primary">
@@ -237,8 +243,12 @@ const ProfileMemberView = ({
           </div>
           <div className={styles.profile__main__row__password}>
             <h2>Change Password</h2>
-            <form onSubmit={handleChangePassword}>
+            <form
+              onSubmit={handleChangePassword}
+              className={styles.profile__main__row__password__form}
+            >
               <Input
+                className={styles.profile__main__row__password__form__input}
                 type="password"
                 name="old-password"
                 label="Old Password"
@@ -246,6 +256,7 @@ const ProfileMemberView = ({
                 placeholder="Enter your old password"
               ></Input>
               <Input
+                className={styles.profile__main__row__password__form__input}
                 type="password"
                 name="new-password"
                 label="New Password"

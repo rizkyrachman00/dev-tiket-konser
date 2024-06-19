@@ -9,30 +9,7 @@ type PropTypes = {
 };
 
 const ProfileMemberPage = ({ setToaster }: PropTypes) => {
-  const [profile, setProfile] = useState<User | {}>({});
-  const session: any = useSession();
-  useEffect(() => {
-    if (session.data?.accessToken && Object.keys(profile).length === 0) {
-      const getProfile = async () => {
-        const { data } = await userServices.getProfile(
-          session.data?.accessToken
-        );
-
-        setProfile(data.data);
-      };
-      getProfile();
-    }
-  }, [profile, session]);
-  return (
-    <div>
-      <ProfileMemberView
-        profile={profile}
-        setProfile={setProfile}
-        session={session}
-        setToaster={setToaster}
-      />
-    </div>
-  );
+  return <ProfileMemberView setToaster={setToaster} />;
 };
 
 export default ProfileMemberPage;

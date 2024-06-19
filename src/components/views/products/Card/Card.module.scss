@@ -7,18 +7,19 @@
     border-radius: 10px;
   }
   &__title {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 900;
     margin-top: 10px;
   }
-  &__category {
-    font-size: 16px;
-    font-weight: 500;
+  &__region {
+    font-size: 20px;
+    font-weight: 600;
     margin-top: 5px;
   }
-  &__price {
-    font-size: 16px;
+  &__genre {
+    font-size: 17px;
     font-weight: 500;
     margin-top: 5px;
+    color: #8e8e8e;
   }
 }

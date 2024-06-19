@@ -18,15 +18,11 @@ type PropTypes = {
 const ModalDeleteProduct = (props: PropTypes) => {
   const { deletedProduct, setDeletedProduct, setProductsData, setToaster } =
     props;
-  const session: any = useSession();
   const [isLoading, setIsloading] = useState(false);
 
   const handleDelete = async () => {
     try {
-      const result = await productServices.deleteProduct(
-        deletedProduct.id,
-        session.data?.accessToken
-      );
+      const result = await productServices.deleteProduct(deletedProduct.id);
       if (result.status === 200) {
         setIsloading(false);
         deleteFile(
@@ -34,7 +30,6 @@ const ModalDeleteProduct = (props: PropTypes) => {
             deletedProduct.image.split("%2F")[3].split("?")[0]
           }`,
           async (status: boolean) => {
-            console.log(status);
             if (status) {
               setToaster({
                 variant: "success",
@@ -57,7 +52,9 @@ const ModalDeleteProduct = (props: PropTypes) => {
   };
   return (
     <Modal onClose={() => setDeletedProduct({})}>
-      <h1 className={styles.modal__title}>Are you sure to delete this user?</h1>
+      <h1 className={styles.modal__title}>
+        Are you sure to delete this concert?
+      </h1>
       <Button type="button" onClick={() => handleDelete()}>
         {isLoading ? "Deleting..." : "Yes, Delete"}
       </Button>

@@ -21,14 +21,11 @@ type PropType = {
 const ModalUpdateProduct = (props: PropType) => {
   const { updatedProduct, setUpdatedProduct, setToaster, setProductsData } =
     props;
-
-  console.log(updatedProduct);
   const [isLoading, setIsloading] = useState(false);
   const [genreCount, setGenreCount] = useState(updatedProduct.genres);
   const [priceCount, setPriceCount] = useState(updatedProduct.prices);
   const [stockCount, setStockCount] = useState(updatedProduct.stocks);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-  const session: any = useSession();
 
   const handleGenre = (e: any, i: number) => {
     const newGenreCount: any = [...genreCount];
@@ -48,73 +45,83 @@ const ModalUpdateProduct = (props: PropType) => {
     setStockCount(newStockCount);
   };
 
-  const uploadImage = (id: string, form: any) => {
-    const file = form.image.files[0];
-    const newName = "main." + file.name.split(".")[1];
-    if (file) {
-      uploadFile(
-        id,
-        file,
-        newName,
-        "products",
-        async (status: boolean, newImageURL: string) => {
-          if (status) {
-            const data = {
-              image: newImageURL,
-            };
-            const result = await productServices.updateProduct(
-              id,
-              data,
-              session.data?.accessToken
-            );
-            if (result.status === 200) {
-              setIsloading(false);
-              setUploadedImage(null);
-              form.reset();
-              setUpdatedProduct(false);
-              const { data } = await productServices.getAllProducts();
-              setProductsData(data.data);
-              setToaster({
-                variant: "success",
-                message: "Success Add Product ",
-              });
-            } else {
-              setIsloading(false);
-              setToaster({
-                variant: "danger",
-                message: "Failed Add Product ",
-              });
-            }
-          } else {
-            setIsloading(false);
-            setToaster({
-              variant: "danger",
-              message: "Failed Add Product ",
-            });
-          }
-        }
-      );
-    }
-  };
+  // const uploadImage = (id: string, form: any) => {
+  //   const file = form.image.files[0];
+  //   const newName = "main." + file.name.split(".")[1];
+  //   if (file) {
+  //     uploadFile(
+  //       id,
+  //       file,
+  //       newName,
+  //       "products",
+  //       async (status: boolean, newImageURL: string) => {
+  //         if (status) {
+  //           const data = {
+  //             image: newImageURL,
+  //           };
+  //           const result = await productServices.updateProduct(
+  //             id,
+  //             data,
+  //             session.data?.accessToken
+  //           );
+  //           if (result.status === 200) {
+  //             setIsloading(false);
+  //             setUploadedImage(null);
+  //             form.reset();
+  //             setUpdatedProduct(false);
+  //             const { data } = await productServices.getAllProducts();
+  //             setProductsData(data.data);
+  //             setToaster({
+  //               variant: "success",
+  //               message: "Success Add Product ",
+  //             });
+  //           } else {
+  //             setIsloading(false);
+  //             setToaster({
+  //               variant: "danger",
+  //               message: "Failed Add Product ",
+  //             });
+  //           }
+  //         } else {
+  //           setIsloading(false);
+  //           setToaster({
+  //             variant: "danger",
+  //             message: "Failed Add Product ",
+  //           });
+  //         }
+  //       }
+  //     );
+  //   }
+  // };
 
   const updateProduct: any = async (
     form: any,
     newImageURL: string = updateProduct.image
   ) => {
+    const price = priceCount.map((price: { category: string; idr: number }) => {
+      return {
+        category: price.category,
+        idr: parseInt(`${price.idr}`),
+      };
+    });
+
+    const stock = stockCount.map((stock: { category: string; qty: number }) => {
+      return {
+        category: stock.category,
+        qty: parseInt(`${stock.qty}`),
+      };
+    });
     const data = {
       name: form.name.value,
       genres: genreCount,
       region: form.region.value,
+      description: form.description.value,
       status: form.status.value,
-      prices: priceCount,
-      stocks: stockCount,
+      prices: price,
+      stocks: stock,
       image: newImageURL,
     };
-    const result = await productServices.updateProduct(
-      updatedProduct.id,
-      data,
-      session.data?.accessToken
-    );
+    const result = await productServices.updateProduct(updatedProduct.id, data);
     if (result.status === 200) {
       setIsloading(false);
       setUploadedImage(null);
@@ -124,13 +131,13 @@ const ModalUpdateProduct = (props: PropType) => {
       setProductsData(data.data);
       setToaster({
         variant: "success",
-        message: "Success Update Product ",
+        message: "Success Update Concert ",
       });
     } else {
       setIsloading(false);
       setToaster({
         variant: "danger",
-        message: "Failed Update Product ",
+        message: "Failed Update Concert ",
       });
     }
   };
@@ -171,6 +178,7 @@ const ModalUpdateProduct = (props: PropType) => {
       <h1>Add Concert</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <Input
+          className={styles.form__input}
           label="Name"
           name="name"
           type="text"
@@ -182,6 +190,7 @@ const ModalUpdateProduct = (props: PropType) => {
           <div className={styles.form__genre} key={i}>
             <div className={styles.form__genre__item}>
               <Input
+                className={styles.form__input}
                 name="genre"
                 type="text"
                 placeholder={`Insert Genre ${i + 1}`}
@@ -202,6 +211,7 @@ const ModalUpdateProduct = (props: PropType) => {
         </Button>
 
         <Input
+          className={styles.form__input}
           label="Region"
           name="region"
           type="text"
@@ -210,6 +220,7 @@ const ModalUpdateProduct = (props: PropType) => {
         />
 
         <Select
+          className={styles.form__input}
           label="Status"
           name="status"
           options={[
@@ -224,6 +235,7 @@ const ModalUpdateProduct = (props: PropType) => {
             <div className={styles.form__price} key={i}>
               <div className={styles.form__price__item}>
                 <Input
+                  className={styles.form__input}
                   label="Category"
                   name="category"
                   type="text"
@@ -236,6 +248,7 @@ const ModalUpdateProduct = (props: PropType) => {
               </div>
               <div className={styles.form__price__item}>
                 <Input
+                  className={styles.form__input}
                   label="IDR"
                   name="idr"
                   type="number"
@@ -265,6 +278,7 @@ const ModalUpdateProduct = (props: PropType) => {
             <div className={styles.form__stock} key={i}>
               <div className={styles.form__stock__item}>
                 <Input
+                  className={styles.form__input}
                   label="Category"
                   name="category"
                   type="text"
@@ -277,6 +291,7 @@ const ModalUpdateProduct = (props: PropType) => {
               </div>
               <div className={styles.form__stock__item}>
                 <Input
+                  className={styles.form__input}
                   label="Qty"
                   name="qty"
                   type="number"
@@ -299,6 +314,14 @@ const ModalUpdateProduct = (props: PropType) => {
         >
           Add New Stock
         </Button>
+        <Input
+          className={styles.form__input}
+          label="Description"
+          name="description"
+          type="text"
+          placeholder="Insert Concert Description"
+          defaultValue={updatedProduct.description}
+        />
         <div className={styles.form__image}>
           <Image
             width={150}

@@ -59,11 +59,7 @@ const ModalAddProduct = (props: PropType) => {
             const data = {
               image: newImageURL,
             };
-            const result = await productServices.updateProduct(
-              id,
-              data,
-              session.data?.accessToken
-            );
+            const result = await productServices.updateProduct(id, data);
             if (result.status === 200) {
               setIsloading(false);
               setUploadedImage(null);
@@ -98,20 +94,32 @@ const ModalAddProduct = (props: PropType) => {
     event.preventDefault();
     setIsloading(true);
     const form: any = event.target as HTMLFormElement;
+    const price = priceCount.map((price) => {
+      return {
+        category: price.category,
+        idr: parseInt(`${price.idr}`),
+      };
+    });
+
+    const stock = stockCount.map((stock) => {
+      return {
+        category: stock.category,
+        qty: parseInt(`${stock.qty}`),
+      };
+    });
+
     const data = {
       name: form.name.value,
       genres: genreCount,
       region: form.region.value,
       status: form.status.value,
-      prices: priceCount,
-      stocks: stockCount,
+      description: form.description.value,
+      prices: price,
+      stocks: stock,
       image: "",
     };
 
-    const result = await productServices.addProduct(
-      data,
-      session.data?.accessToken
-    );
+    const result = await productServices.addProduct(data);
 
     if (result.status === 200) {
       uploadImage(result.data.data.id, form);
@@ -127,12 +135,14 @@ const ModalAddProduct = (props: PropType) => {
           name="name"
           type="text"
           placeholder="Insert Concert Name"
+          className={styles.form__input}
         />
         <label htmlFor="price">Genre</label>
         {genreCount.map((item: any, i: number) => (
           <div className={styles.form__genre} key={i}>
             <div className={styles.form__genre__item}>
               <Input
+                className={styles.form__input}
                 name="genre"
                 type="text"
                 placeholder={`Insert Genre ${i + 1}`}
@@ -156,9 +166,11 @@ const ModalAddProduct = (props: PropType) => {
           name="region"
           type="text"
           placeholder="Insert Location"
+          className={styles.form__input}
         />
 
         <Select
+          className={styles.form__input}
           label="Status"
           name="status"
           options={[
@@ -172,6 +184,7 @@ const ModalAddProduct = (props: PropType) => {
             <div className={styles.form__price} key={i}>
               <div className={styles.form__price__item}>
                 <Input
+                  className={styles.form__input}
                   label="Category"
                   name="category"
                   type="text"
@@ -183,6 +196,7 @@ const ModalAddProduct = (props: PropType) => {
               </div>
               <div className={styles.form__price__item}>
                 <Input
+                  className={styles.form__input}
                   label="IDR"
                   name="idr"
                   type="number"
@@ -211,6 +225,7 @@ const ModalAddProduct = (props: PropType) => {
             <div className={styles.form__stock} key={i}>
               <div className={styles.form__stock__item}>
                 <Input
+                  className={styles.form__input}
                   label="Category"
                   name="category"
                   type="text"
@@ -222,6 +237,7 @@ const ModalAddProduct = (props: PropType) => {
               </div>
               <div className={styles.form__stock__item}>
                 <Input
+                  className={styles.form__input}
                   label="Qty"
                   name="qty"
                   type="number"
@@ -243,6 +259,13 @@ const ModalAddProduct = (props: PropType) => {
         >
           Add New Stock
         </Button>
+        <Input
+          label="Description"
+          name="description"
+          type="text"
+          placeholder="Insert Concert Description"
+          className={styles.form__input}
+        />
         <div className={styles.form__image}>
           {uploadedImage ? (
             <Image

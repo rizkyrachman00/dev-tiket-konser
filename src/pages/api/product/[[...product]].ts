@@ -1,7 +1,11 @@
-import { addData, retrieveData, updateData } from "@/lib/firebase/service";
+import {
+  addData,
+  retrieveData,
+  retrieveDataById,
+  updateData,
+} from "@/lib/firebase/service";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
-import { error } from "console";
 import { deleteData } from "@/lib/firebase/service";
 
 export default async function handler(
@@ -9,11 +13,27 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const data = await retrieveData("products");
+    // const data = await retrieveData("products");
+    // res
+    //   .status(200)
+    //   .json({ status: true, statusCode: 200, message: "success", data });
+    // jika tidak ada kode diatas, bagian admin produk error get data nya
 
-    res
-      .status(200)
-      .json({ status: true, statusCode: 200, message: "success", data });
+    const { product }: any = req.query;
+    if (product && product[0]) {
+      const data = await retrieveDataById("products", product[0]);
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "success",
+        data,
+      });
+    } else {
+      const data = await retrieveData("products");
+      res
+        .status(200)
+        .json({ status: true, statusCode: 200, message: "success", data });
+    }
   } else if (req.method === "POST") {
     const token = req.headers.authorization?.split(" ")[1] || "";
     jwt.verify(
