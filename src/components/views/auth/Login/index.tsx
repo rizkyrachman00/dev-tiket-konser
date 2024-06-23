@@ -1,17 +1,14 @@
-import Link from "next/link";
 import styles from "./Login.module.scss";
 import { useRouter } from "next/router";
-import { Dispatch, FormEvent, use, useState, SetStateAction } from "react";
+import { FormEvent, useState, useContext } from "react";
 import { signIn } from "next-auth/react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import AuthLayout from "@/components/layouts/AuthLayout";
+import { ToasterContext } from "@/contexts/ToasterContext";
 
-const LoginView = ({
-  setToaster,
-}: {
-  setToaster: Dispatch<SetStateAction<{}>>;
-}) => {
+const LoginView = () => {
+  const { setToaster } = useContext(ToasterContext);
   const [isLoading, setIsloading] = useState(false);
   const { push, query } = useRouter();
 
@@ -57,7 +54,6 @@ const LoginView = ({
       title="Login"
       link="/auth/register"
       linkText="Don't have an account? Sign Up "
-      setToaster={setToaster}
     >
       <form onSubmit={handleSubmit}>
         <Input

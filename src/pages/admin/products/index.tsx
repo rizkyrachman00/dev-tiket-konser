@@ -1,14 +1,8 @@
-import ProductsAdminView from "@/components/views/admin/Products";
+import ProductsAdminView from "@/components/views/Admin/Products";
 import productServices from "@/services/product";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 
-type PropTypes = {
-  setToaster: any;
-};
-
-const AdminProductsPage = (props: PropTypes) => {
-  const { setToaster } = props;
+const AdminProductsPage = () => {
   const [products, setProducts] = useState([]);
   const getAllProducts = async () => {
     const { data } = await productServices.getAllProducts();
@@ -20,7 +14,7 @@ const AdminProductsPage = (props: PropTypes) => {
 
   return (
     <>
-      <ProductsAdminView products={products} setToaster={setToaster} />
+      <ProductsAdminView products={products} />
     </>
   );
 };

@@ -1,14 +1,9 @@
-import ProductView from "@/components/views/products";
+import ProductView from "@/components/views/Products";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import productServices from "@/services/product";
 
-type PropTypes = {
-  setToaster: any;
-};
-
-const ProductPage = (props: PropTypes) => {
-  const { setToaster } = props;
+const ProductPage = () => {
   const [products, setProducts] = useState([]);
   const getAllProducts = async () => {
     const { data } = await productServices.getAllProducts();

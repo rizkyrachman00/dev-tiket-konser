@@ -1,16 +1,17 @@
-import { Dispatch, SetStateAction } from "react";
+import { useContext } from "react";
 import styles from "./AuthLayout.module.scss";
 import Link from "next/link";
+import { ToasterContext } from "@/contexts/ToasterContext";
 
 type Propstypes = {
   title?: string;
   children: React.ReactNode;
   link: string;
   linkText?: string;
-  setToaster: Dispatch<SetStateAction<{}>>;
 };
 
 const AuthLayout = (props: Propstypes) => {
+  const { setToaster } = useContext(ToasterContext);
   const { title, children, link, linkText } = props;
   return (
     <div className={styles.auth}>

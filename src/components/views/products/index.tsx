@@ -2,7 +2,7 @@ import styles from "./Products.module.scss";
 import Image from "next/image";
 import { Product } from "@/types/product.type";
 import { convertIDR } from "@/utils/currency";
-import Card from "@/components/views/products/Card";
+import Card from "@/components/views/Products/Card";
 import Link from "next/link";
 
 type PropTypes = {

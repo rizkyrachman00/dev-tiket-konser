@@ -3,22 +3,30 @@ import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import styles from "./ModalAddProduct.module.scss";
-import { Dispatch, SetStateAction, useState, FormEvent } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useState,
+  FormEvent,
+  useContext,
+} from "react";
 import { Product } from "@/types/product.type";
 import InputFile from "@/components/ui/InputFile";
 import productServices from "@/services/product";
 import { useSession } from "next-auth/react";
 import { uploadFile } from "@/lib/firebase/service";
 import Image from "next/image";
+import { ToasterContext } from "@/contexts/ToasterContext";
 
 type PropType = {
   setModalAddProduct: Dispatch<SetStateAction<boolean>>;
-  setToaster: Dispatch<SetStateAction<{}>>;
+
   setProductsData: Dispatch<SetStateAction<Product[]>>;
 };
 
 const ModalAddProduct = (props: PropType) => {
-  const { setModalAddProduct, setToaster, setProductsData } = props;
+  const { setModalAddProduct, setProductsData } = props;
+  const { setToaster } = useContext(ToasterContext);
 
   const [isLoading, setIsloading] = useState(false);
   const [genreCount, setGenreCount] = useState([""]);

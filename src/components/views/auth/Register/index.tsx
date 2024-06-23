@@ -1,17 +1,14 @@
-import Link from "next/link";
 import styles from "./Register.module.scss";
 import { useRouter } from "next/router";
-import { FormEvent, use, useState, Dispatch, SetStateAction } from "react";
+import { FormEvent, useState, useContext } from "react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import authServices from "@/services/auth";
 import AuthLayout from "@/components/layouts/AuthLayout";
+import { ToasterContext } from "@/contexts/ToasterContext";
 
-const RegisterView = ({
-  setToaster,
-}: {
-  setToaster: Dispatch<SetStateAction<{}>>;
-}) => {
+const RegisterView = () => {
+  const { setToaster } = useContext(ToasterContext);
   const [isLoading, setIsloading] = useState(false);
   const { push } = useRouter();
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -56,7 +53,7 @@ const RegisterView = ({
       title="Register"
       link="/auth/login"
       linkText=" Have an account ? Sign In "
-      setToaster={setToaster}
+  
     >
       <form onSubmit={handleSubmit}>
         <Input
