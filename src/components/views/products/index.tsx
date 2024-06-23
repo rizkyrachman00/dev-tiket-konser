@@ -1,7 +1,7 @@
 import styles from "./Products.module.scss";
 import { Product } from "@/types/product.type";
-import Card from "@/components/views/Products/Card";
 import Link from "next/link";
+import Card from "./Card";
 
 type PropTypes = {
   products: Product[];
