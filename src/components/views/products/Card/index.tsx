@@ -1,7 +1,6 @@
 import styles from "./Card.module.scss";
 import Image from "next/image";
 import { Product } from "@/types/product.type";
-import { convertIDR } from "@/utils/currency";
 
 type PropTypes = {
   product: Product;
