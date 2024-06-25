@@ -1,8 +1,6 @@
 import styles from "./Checkout.module.scss";
 import Image from "next/image";
 import { convertIDR } from "@/utils/currency";
-import Select from "@/components/ui/Select";
-import Input from "@/components/ui/Input";
 import { Fragment, useContext, useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
 import userServices from "@/services/user";
@@ -69,6 +67,29 @@ const CheckoutView = () => {
       0
     );
     return total;
+  };
+
+  const handlePayment = async () => {
+    const data = {
+      first_name: profile.fullname,
+      email: profile.email,
+      phone: profile.phone,
+      gross_amount: getTotalPrize(),
+    };
+
+    try {
+      const response = await userServices.addTransaction(data);
+      const result = await response.data;
+      const token = result.data.token;
+      window.snap.pay(token, {
+        onSuccess: function (result: any) {
+          const redirectUrl = result.redirect_url;
+          window.location.href = redirectUrl;
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -197,7 +218,11 @@ const CheckoutView = () => {
             <p> {convertIDR(getTotalPrize())}</p>
           </div>
           <hr />
-          <Button type="button" className={styles.checkout__summary__button}>
+          <Button
+            onClick={handlePayment}
+            type="button"
+            className={styles.checkout__summary__button}
+          >
             Payment
           </Button>
         </div>
