@@ -87,8 +87,8 @@ const CheckoutView = () => {
                     className={styles.checkout__main__address__selected__title}
                   >
                     {profile?.address[selectedAddress]?.recipient}
-                    {profile?.address[selectedAddress]?.phone}
                   </h4>
+                  <h4>{profile?.address[selectedAddress]?.phone}</h4>
                   <p
                     className={
                       styles.checkout__main__address__selected__address
