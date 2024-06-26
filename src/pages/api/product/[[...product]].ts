@@ -8,7 +8,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { deleteData } from "@/lib/firebase/service";
 import { verify } from "@/utils/verifyToken";
 import {
-  responseApi,
   responseApiFailed,
   responseApiMethodNotAllowed,
   responseApiSuccess,

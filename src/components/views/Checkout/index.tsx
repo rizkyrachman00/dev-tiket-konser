@@ -10,6 +10,7 @@ import productServices from "@/services/product";
 import { Product } from "@/types/product.type";
 import ModalChangeAddress from "./ModalChangeAddress";
 import transactionServices from "@/services/transaction";
+import { redirect } from "next/navigation";
 
 const CheckoutView = () => {
   const { setToaster } = useContext(ToasterContext);
@@ -73,7 +74,6 @@ const CheckoutView = () => {
   const handlePayment = async () => {
     const mappedItemDetails = profile?.carts?.map(
       (item: { id: string; category: string; qty: number }) => {
-        const product = getProduct(item.id);
         const price = getAmount(item.id, item.category);
         return {
           id: item.id,
@@ -101,12 +101,30 @@ const CheckoutView = () => {
       const result = await reqData.data;
       console.log(result);
       const token = result.data.token;
-      window.snap.pay(token, {
-        onSuccess: function (result: any) {
-          const redirectUrl = result.redirect_url;
-          window.location.href = redirectUrl;
-        },
-      });
+
+      if (result && result.statusCode === 200) {
+        window.snap.pay(token, {
+          onSuccess: function (result: any) {
+            // const redirectUrl = result.redirect_url;
+            // products?order_id=1719421237382-0.4414f7513dc94&status_code=200&transaction_status=settlement
+            redirect(`/`);
+          },
+          onPending: function (result: any) {
+            console.log("pending");
+            console.log(result);
+            // redirect("/products");
+          },
+          onError: function (result: any) {
+            console.log("error");
+            console.log(result);
+          },
+          onClose: function () {
+            console.log(
+              "customer closed the popup without finishing the payment"
+            );
+          },
+        });
+      }
     } catch (error) {
       console.log(error);
     }

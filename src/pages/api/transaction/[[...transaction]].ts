@@ -1,10 +1,17 @@
 import {
   responseApi,
+  responseApiFailed,
   responseApiMethodNotAllowed,
   responseApiSuccess,
 } from "@/utils/responseApi";
 import type { NextApiRequest, NextApiResponse } from "next";
 import createTransaction from "@/lib/midtrans/transaction";
+import {
+  retrieveData,
+  retrieveDataById,
+  updateData,
+} from "@/lib/firebase/service";
+import { verify } from "@/utils/verifyToken";
 
 type Data = {
   status: boolean;
@@ -34,13 +41,21 @@ export default function handler(
       );
     }
 
-    const mappedItemDetails = itemDetails.map((item: any) => ({
-      id: item.id,
-      price: item.price,
-      quantity: item.quantity,
-      name: item.name,
-      category: item.category,
-    }));
+    const mappedItemDetails = itemDetails.map(
+      (item: {
+        id: string;
+        price: number;
+        quantity: number;
+        name: string;
+        category: string;
+      }) => ({
+        id: item.id,
+        price: item.price,
+        quantity: item.quantity,
+        name: item.name,
+        category: item.category,
+      })
+    );
 
     const generateOrderId = `${Date.now()}-${Math.random().toString(16)}`;
     const params = {
@@ -62,6 +77,41 @@ export default function handler(
         responseApiSuccess(res, transaction);
       }
     );
+  } else if (req.method === "GET") {
+    const { transaction } = req.query;
+
+    if (transaction && transaction[0]) {
+      const data = async () => {
+        await retrieveDataById("transactions", transaction[0]);
+        return data;
+      };
+
+      responseApiSuccess(res, data);
+    } else {
+      const data = async () => {
+        await retrieveData("products");
+        return data;
+      };
+
+      responseApiSuccess(res, data);
+    }
+  } else if (req.method === "PUT") {
+    verify(req, res, true, async () => {
+      const { transaction }: any = req.query;
+      const { data } = req.body;
+      await updateData(
+        "transactions",
+        transaction[0],
+        data,
+        (status: boolean) => {
+          if (status) {
+            responseApiSuccess(res);
+          } else {
+            responseApiFailed(res);
+          }
+        }
+      );
+    });
   } else {
     responseApiMethodNotAllowed(res);
   }
