@@ -17,11 +17,30 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   if (req.method === "POST") {
-    const { first_name, email, phone, gross_amount } = req.body;
+    const { customerName, email, phone, gross_amount, itemDetails } = req.body;
 
-    if (!first_name || !email || !phone || !gross_amount) {
-      return responseApi(res, false, 400, "Missing required fields");
+    if (
+      !customerName ||
+      !email ||
+      !phone ||
+      !gross_amount ||
+      !Array.isArray(itemDetails)
+    ) {
+      return responseApi(
+        res,
+        false,
+        400,
+        "Missing required fields or itemDetails is not an array"
+      );
     }
+
+    const mappedItemDetails = itemDetails.map((item: any) => ({
+      id: item.id,
+      price: item.price,
+      quantity: item.quantity,
+      name: item.name,
+      category: item.category,
+    }));
 
     const generateOrderId = `${Date.now()}-${Math.random().toString(16)}`;
     const params = {
@@ -30,10 +49,11 @@ export default function handler(
         gross_amount: parseInt(gross_amount, 10),
       },
       customer_details: {
-        first_name,
-        email,
-        phone,
+        first_name: customerName,
+        email: email,
+        phone: phone,
       },
+      item_details: mappedItemDetails,
     };
 
     createTransaction(

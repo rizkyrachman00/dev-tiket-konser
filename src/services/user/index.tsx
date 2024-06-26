@@ -16,8 +16,8 @@ const userServices = {
   updateProfile: (data: any) => instance.put(endpoint.profile, { data }),
   getCart: () => instance.get(endpoint.cart),
   addToCart: (data: any) => instance.put(endpoint.cart, { data }),
-  addTransaction: async (data: any) => {
-    const response = await instance.post(endpoint.transaction, data);
+  createTransaction: async (data: any) => {
+    const response = await instance.post(endpoint.transaction, { data });
     return response;
   },
 };

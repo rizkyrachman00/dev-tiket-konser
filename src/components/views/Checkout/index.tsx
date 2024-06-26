@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import productServices from "@/services/product";
 import { Product } from "@/types/product.type";
 import ModalChangeAddress from "./ModalChangeAddress";
+import transactionServices from "@/services/transaction";
 
 const CheckoutView = () => {
   const { setToaster } = useContext(ToasterContext);
@@ -70,16 +71,35 @@ const CheckoutView = () => {
   };
 
   const handlePayment = async () => {
+    const mappedItemDetails = profile?.carts?.map(
+      (item: { id: string; category: string; qty: number }) => {
+        const product = getProduct(item.id);
+        const price = getAmount(item.id, item.category);
+        return {
+          id: item.id,
+          price: price,
+          quantity: item.qty,
+          name: getProduct(item.id)?.name,
+          category: item.category,
+        };
+      }
+    );
+
+    console.log(mappedItemDetails);
+    console.log(getTotalPrize());
+
     const data = {
-      first_name: profile.fullname,
+      customerName: profile.fullname,
       email: profile.email,
       phone: profile.phone,
       gross_amount: getTotalPrize(),
+      itemDetails: mappedItemDetails,
     };
 
     try {
-      const response = await userServices.addTransaction(data);
-      const result = await response.data;
+      const reqData = await transactionServices.createTransaction(data);
+      const result = await reqData.data;
+      console.log(result);
       const token = result.data.token;
       window.snap.pay(token, {
         onSuccess: function (result: any) {
