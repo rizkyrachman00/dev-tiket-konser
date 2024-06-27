@@ -5,6 +5,7 @@ const headers = {
   Accept: "application/json",
   "Content-Type": "application/json",
   "Cache-Control": "no-cache",
+  Authorization: process.env.NEXT_PUBLIC_MIDTRANS_SERVER_KEY || "",
   Expires: 0,
 };
 

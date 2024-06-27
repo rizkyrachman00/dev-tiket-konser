@@ -21,6 +21,11 @@ const transactionServices = {
     return response;
   },
 
+  getTransaction: async () => {
+    const response = await instance.get(endpoint.transaction);
+    return response;
+  },
+
   updateTransactionStatus: async (id: any, data: any) => {
     const response = await instance.put(`${endpoint.transaction}/${id}`, {
       data,

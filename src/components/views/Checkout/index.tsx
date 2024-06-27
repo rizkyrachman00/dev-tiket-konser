@@ -10,13 +10,13 @@ import productServices from "@/services/product";
 import { Product } from "@/types/product.type";
 import ModalChangeAddress from "./ModalChangeAddress";
 import transactionServices from "@/services/transaction";
-import { redirect } from "next/navigation";
 
 const CheckoutView = () => {
   const { setToaster } = useContext(ToasterContext);
   const session: any = useSession();
   const [profile, setProfile] = useState<any>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [transaction, setTransaction] = useState<any>([]);
   const [selectedAddress, setSelectedAddress] = useState(0);
   const [changeAddress, setChangeAddress] = useState(false);
 
@@ -51,6 +51,35 @@ const CheckoutView = () => {
     return product;
   };
 
+  const SERVER_KEY = process.env.NEXT_PUBLIC_MIDTRANS_SERVER_KEY; // Replace with your actual server key
+
+  const getTransactionStatus = async (orderId: string): Promise<any> => {
+    const url = `https://api.sandbox.midtrans.com/v2/${orderId}/status`;
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        authorization:
+          "Basic " + Buffer.from(SERVER_KEY + ":").toString("base64"),
+      },
+    };
+
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch transaction status: ${response.statusText}`
+        );
+      }
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching transaction status:", error);
+      throw error;
+    }
+  };
+
   const getAmount = (id: string, category: string) => {
     const product = products.find((product) => product.id === id);
     const price = product?.prices.find(
@@ -71,6 +100,23 @@ const CheckoutView = () => {
     return total;
   };
 
+  const formatCurrentDate = () => {
+    const currentDate = new Date();
+
+    // Get components of the date
+    const year = currentDate.getFullYear();
+    const month = ("0" + (currentDate.getMonth() + 1)).slice(-2); // Months are zero-indexed
+    const day = ("0" + currentDate.getDate()).slice(-2);
+    const hours = ("0" + currentDate.getHours()).slice(-2);
+    const minutes = ("0" + currentDate.getMinutes()).slice(-2);
+    const seconds = ("0" + currentDate.getSeconds()).slice(-2);
+
+    // Format the date string
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    return formattedDate;
+  };
+
   const handlePayment = async () => {
     const mappedItemDetails = profile?.carts?.map(
       (item: { id: string; category: string; qty: number }) => {
@@ -87,14 +133,33 @@ const CheckoutView = () => {
 
     console.log(mappedItemDetails);
     console.log(getTotalPrize());
+    const generateOrderId = `${Date.now()}-${Math.random().toString(16)}`;
 
     const data = {
+      orderId: generateOrderId,
       customerName: profile.fullname,
       email: profile.email,
       phone: profile.phone,
       gross_amount: getTotalPrize(),
       itemDetails: mappedItemDetails,
     };
+
+    const addTransactionUser = {
+      orderId: generateOrderId,
+      gross_amount: getTotalPrize(),
+      created_at: formatCurrentDate(),
+      itemDetails: mappedItemDetails,
+    };
+
+    let updatedTransactions = [];
+
+    if (Array.isArray(profile.transactions)) {
+      // Concatenate new transaction with existing transactions
+      updatedTransactions = [...profile.transactions, addTransactionUser];
+    } else {
+      // If profile.transactions is not an array or undefined, start with a new array
+      updatedTransactions = [addTransactionUser];
+    }
 
     try {
       const reqData = await transactionServices.createTransaction(data);
@@ -103,11 +168,19 @@ const CheckoutView = () => {
       const token = result.data.token;
 
       if (result && result.statusCode === 200) {
+        await userServices.updateProfile({
+          transactions: updatedTransactions,
+        });
+
         window.snap.pay(token, {
-          onSuccess: function (result: any) {
-            // const redirectUrl = result.redirect_url;
-            // products?order_id=1719421237382-0.4414f7513dc94&status_code=200&transaction_status=settlement
-            redirect(`/`);
+          onSuccess: async function (result: any) {
+            try {
+              console.log("success");
+              console.log(result);
+              console.log(result.order_id);
+            } catch (error) {
+              console.error("Failed to update profile:", error);
+            }
           },
           onPending: function (result: any) {
             console.log("pending");

@@ -24,7 +24,8 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   if (req.method === "POST") {
-    const { customerName, email, phone, gross_amount, itemDetails } = req.body;
+    const { customerName, email, phone, gross_amount, itemDetails, orderId } =
+      req.body;
 
     if (
       !customerName ||
@@ -57,10 +58,9 @@ export default function handler(
       })
     );
 
-    const generateOrderId = `${Date.now()}-${Math.random().toString(16)}`;
     const params = {
       transaction_details: {
-        order_id: generateOrderId,
+        order_id: orderId,
         gross_amount: parseInt(gross_amount, 10),
       },
       customer_details: {
@@ -89,7 +89,7 @@ export default function handler(
       responseApiSuccess(res, data);
     } else {
       const data = async () => {
-        await retrieveData("products");
+        await retrieveData("transactions");
         return data;
       };
 
