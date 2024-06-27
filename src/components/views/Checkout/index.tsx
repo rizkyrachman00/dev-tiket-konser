@@ -53,7 +53,9 @@ const CheckoutView = () => {
 
   const SERVER_KEY = process.env.NEXT_PUBLIC_MIDTRANS_SERVER_KEY; // Replace with your actual server key
 
-  const getTransactionStatus = async (orderId: string): Promise<any> => {
+  const getTransactionStatusMidtrans = async (
+    orderId: string
+  ): Promise<any> => {
     const url = `https://api.sandbox.midtrans.com/v2/${orderId}/status`;
     const options = {
       method: "GET",
@@ -151,6 +153,30 @@ const CheckoutView = () => {
       itemDetails: mappedItemDetails,
     };
 
+    const handleDeleteAllCartItems = async () => {
+      const newCart: any[] = []; // Buat array kosong untuk menyimpan cart baru (kosong)
+
+      try {
+        const result = await userServices.addToCart({
+          carts: newCart,
+        });
+
+        if (result.status === 200) {
+          // Set state cart menjadi array kosong
+          setProfile(newCart);
+          setToaster({
+            variant: "success",
+            message: "Success Delete All Items From Cart",
+          });
+        }
+      } catch (error) {
+        setToaster({
+          variant: "danger",
+          message: "Failed Delete All Items From Cart",
+        });
+      }
+    };
+
     let updatedTransactions = [];
 
     if (Array.isArray(profile.transactions)) {
@@ -171,6 +197,8 @@ const CheckoutView = () => {
         await userServices.updateProfile({
           transactions: updatedTransactions,
         });
+
+        handleDeleteAllCartItems();
 
         window.snap.pay(token, {
           onSuccess: async function (result: any) {

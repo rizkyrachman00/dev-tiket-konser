@@ -21,6 +21,8 @@ const userServices = {
   getCart: () => instance.get(endpoint.cart),
   addToCart: (data: any) => instance.put(endpoint.cart, { data }),
 
+  deleteCart: (id: string) => instance.delete(`${endpoint.cart}/${id}`),
+
   createTransaction: async (data: any) => {
     const response = await instance.post(endpoint.transaction, data);
     return response;

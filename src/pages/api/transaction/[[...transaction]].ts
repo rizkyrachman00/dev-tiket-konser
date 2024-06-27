@@ -7,6 +7,7 @@ import {
 import type { NextApiRequest, NextApiResponse } from "next";
 import createTransaction from "@/lib/midtrans/transaction";
 import {
+  deleteData,
   retrieveData,
   retrieveDataById,
   updateData,

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { retrieveDataById } from "@/lib/firebase/service";
+import { deleteData, retrieveDataById } from "@/lib/firebase/service";
 import { updateData } from "@/lib/firebase/service";
 import { verify } from "@/utils/verifyToken";
 import {
@@ -31,6 +31,17 @@ export default async function handler(
     verify(req, res, false, async (decoded: { id: string }) => {
       const { data } = req.body;
       await updateData("users", decoded.id, data, (result: boolean) => {
+        if (result) {
+          responseApiSuccess(res);
+        } else {
+          responseApiFailed(res);
+        }
+      });
+    });
+  } else if (req.method === "DELETE") {
+    verify(req, res, true, async () => {
+      const { cart }: any = req.query;
+      await deleteData("carts", cart[0], (result: boolean) => {
         if (result) {
           responseApiSuccess(res);
         } else {
