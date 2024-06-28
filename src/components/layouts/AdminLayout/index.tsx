@@ -21,13 +21,18 @@ const listSidebarItem = [
     url: "/admin/users",
     icon: "bxs-user-account",
   },
+  {
+    title: "Transactions",
+    url: "/admin/transaction",
+    icon: "bx-receipt",
+  },
 ];
 
 const AdminLayout = (props: Proptypes) => {
   const { children } = props;
   return (
     <div className={styles.admin}>
-      <Sidebar lists={listSidebarItem} />
+      <Sidebar title="Admin Panel" lists={listSidebarItem} />
       <div className={styles.admin__main}>{children}</div>
     </div>
   );

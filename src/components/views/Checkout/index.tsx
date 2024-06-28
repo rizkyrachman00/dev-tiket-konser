@@ -10,6 +10,7 @@ import productServices from "@/services/product";
 import { Product } from "@/types/product.type";
 import ModalChangeAddress from "./ModalChangeAddress";
 import transactionServices from "@/services/transaction";
+import Link from "next/link";
 
 const CheckoutView = () => {
   const { setToaster } = useContext(ToasterContext);
@@ -209,6 +210,7 @@ const CheckoutView = () => {
             } catch (error) {
               console.error("Failed to update profile:", error);
             }
+            <Link href="/products" />;
           },
           onPending: function (result: any) {
             console.log("pending");

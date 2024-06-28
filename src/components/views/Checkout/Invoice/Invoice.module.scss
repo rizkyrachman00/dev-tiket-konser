@@ -7,6 +7,7 @@
   &__text {
     font-size: 40px;
     font-weight: 900;
+    font-style: italic;
   }
 }
 
@@ -31,8 +32,27 @@
       &__left {
         width: 30%;
         text-align: left;
-        background h1 {
+        &__image {
+          width: 200px;
+          height: 200px;
+          border-radius: 20px;
+        }
+        &__name {
+          font-size: 40px;
+          color: #000 !important;
+          font-weight: 700;
+        }
+        &__address,
+        &__phone {
+          color: #000 !important;
+          font-size: 18px;
+          font-weight: 700;
+        }
+
+        h1 {
           color: grey;
+          font-size: 28px;
+          margin-top: 10px;
         }
         h3 {
           color: grey;
