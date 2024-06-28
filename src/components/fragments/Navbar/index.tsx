@@ -8,10 +8,10 @@ import Button from "@/components/ui/Button";
 import { useState } from "react";
 
 const NavItems = [
-  {
-    title: "Home",
-    url: "/",
-  },
+  // {
+  //   title: "Home",
+  //   url: "/",
+  // },
   {
     title: "Concerts",
     url: "/products",
