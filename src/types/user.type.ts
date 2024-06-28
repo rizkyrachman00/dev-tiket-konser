@@ -1,5 +1,6 @@
 export type User = {
   id: string;
+  transactions?: [];
   fullname: string;
   email: string;
   phone: string;

@@ -1,11 +1,10 @@
 import AdminLayout from "@/components/layouts/AdminLayout";
 import Button from "@/components/ui/Button";
 import styles from "./Users.module.scss";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ModalUpdateUser from "./ModalUpdateUser";
 import ModalDeleteUser from "./ModalDeleteUser";
 import { User } from "@/types/user.type";
-
 
 type PropTypes = {
   users: User[];
@@ -13,7 +12,7 @@ type PropTypes = {
 
 const UsersAdminView = (props: PropTypes) => {
   const { users } = props;
- 
+
   const [updatedUser, setUpdatedUser] = useState<User | {}>({});
   const [deletedUser, setDeletedUser] = useState<User | {}>({});
   const [usersData, setUsersData] = useState<User[]>([]);
@@ -74,7 +73,6 @@ const UsersAdminView = (props: PropTypes) => {
           updatedUser={updatedUser}
           setUpdatedUser={setUpdatedUser}
           setUsersData={setUsersData}
-      
         />
       )}
       {Object.keys(deletedUser).length > 0 && (
@@ -82,7 +80,6 @@ const UsersAdminView = (props: PropTypes) => {
           deletedUser={deletedUser}
           setDeletedUser={setDeletedUser}
           setUsersData={setUsersData}
-       
         />
       )}
     </>
