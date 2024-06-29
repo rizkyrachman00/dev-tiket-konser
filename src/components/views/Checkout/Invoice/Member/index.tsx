@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./Invoice.module.scss";
+import styles from "./InvoiceMember.module.scss";
 import Image from "next/image";
 import { convertIDR } from "@/utils/currency";
 
@@ -8,7 +8,7 @@ type Propstypes = {
   transaction: any;
 };
 
-const InvoiceView = ({ orderId, transaction }: Propstypes) => {
+const InvoiceMemberView = ({ orderId, transaction }: Propstypes) => {
   console.log(orderId);
   console.log(transaction);
 
@@ -185,4 +185,4 @@ const InvoiceView = ({ orderId, transaction }: Propstypes) => {
   );
 };
 
-export default InvoiceView;
+export default InvoiceMemberView;

@@ -45,8 +45,7 @@ const TransactionMemberView = (props: PropTypes) => {
                   <td>{convertIDR(transactions.gross_amount)}</td>
                   <td>
                     <Link
-                      className={styles.transaction__main__table__link}
-                      href={`/invoice/${transactions.orderId}`}
+                      href={`/invoice/member/${transactions.orderId}`}
                       key={transactions.orderId}
                     >
                       <i className="bx bx-receipt" />

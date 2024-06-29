@@ -1,9 +1,9 @@
-import InvoiceView from "@/components/views/Checkout/Invoice";
+import InvoiceMemberView from "@/components/views/Checkout/Invoice/Member";
 import userServices from "@/services/user";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const InvoicePage = () => {
+const InvoiceMemberPage = () => {
   const router = useRouter();
   const { id } = router.query;
   console.log(id);
@@ -21,9 +21,9 @@ const InvoicePage = () => {
 
   return (
     <div>
-      <InvoiceView orderId={id} transaction={transaction} />
+      <InvoiceMemberView orderId={id} transaction={transaction} />
     </div>
   );
 };
 
-export default InvoicePage;
+export default InvoiceMemberPage;

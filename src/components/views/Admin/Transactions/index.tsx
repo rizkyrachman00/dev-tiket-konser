@@ -3,6 +3,7 @@ import { User } from "@/types/user.type";
 import { useEffect, useState } from "react";
 import styles from "./Transactions.module.scss";
 import { convertIDR } from "@/utils/currency";
+import Link from "next/link";
 
 type PropTypes = {
   users: User[];
@@ -23,6 +24,7 @@ const TransactionsAdminView = (props: PropTypes) => {
           userId: user.id,
           username: user.fullname,
           email: user.email,
+          image: user.image,
           ...(transaction as object),
         }));
       } else {
@@ -35,23 +37,6 @@ const TransactionsAdminView = (props: PropTypes) => {
 
   console.log(usersData);
   console.log(transactionsData);
-
-  // useEffect(() => {
-  //   setUsersData(users);
-
-  //   const transactions = users.map((user) => {
-  //     if (user.transactions) {
-  //       return { userId: user.id, transactions: user.transactions };
-  //     } else {
-  //       return { userId: user.id, transactions: [] };
-  //     }
-  //   });
-
-  //   setTransactionsData(transactions);
-  // }, [users]);
-
-  // console.log(usersData);
-  // console.log(transactionsData);
 
   return (
     <>
@@ -84,7 +69,25 @@ const TransactionsAdminView = (props: PropTypes) => {
                   <td>{transaction.status || "Sukses"}</td>
                   <td>{convertIDR(transaction.gross_amount)}</td>
                   <td>
-                    <i className="bx bx-receipt" />
+                    <Link
+                      className={styles.transaction__main__table__link}
+                      href={{
+                        pathname: `/invoice/admin/${transaction.orderId}`,
+                        query: {
+                          username: transaction.username,
+                          amount: transaction.gross_amount,
+                          date: transaction.created_at,
+                          image: transaction.image,
+                          name: transaction.name,
+                          userId: transaction.userId,
+                          itemDetails: JSON.stringify(transaction.itemDetails),
+                          // Add other props here as needed
+                        },
+                      }}
+                      key={(transaction.orderId, transactionsData)}
+                    >
+                      <i className="bx bx-receipt" />
+                    </Link>
                   </td>
                 </tr>
               ))}
