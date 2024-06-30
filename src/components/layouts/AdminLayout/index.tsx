@@ -11,11 +11,11 @@ const listSidebarItem = [
     url: "/",
     icon: "bx bx-home",
   },
-  {
-    title: "Dashboard",
-    url: "/admin",
-    icon: "bxs-dashboard",
-  },
+  // {
+  //   title: "Dashboard",
+  //   url: "/admin",
+  //   icon: "bxs-dashboard",
+  // },
   {
     title: "Products",
     url: "/admin/products",
