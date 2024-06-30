@@ -6,11 +6,16 @@ type Proptypes = {
 };
 
 const listSidebarItem = [
-  // {
-  //   title: "Dashboard",
-  //   url: "/member",
-  //   icon: "bxs-dashboard",
-  // },
+  {
+    title: "Home",
+    url: "/",
+    icon: "bx bx-home",
+  },
+  {
+    title: "Dashboard",
+    url: "/member",
+    icon: "bxs-dashboard",
+  },
   {
     title: "Transactions",
     url: "/member/transaction",

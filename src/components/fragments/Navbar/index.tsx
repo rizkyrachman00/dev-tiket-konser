@@ -23,6 +23,7 @@ const Navbar = () => {
   const { pathname, push } = useRouter();
   const [dropdownUser, setDropdownUser] = useState(false);
 
+  console.log(data);
   return (
     <div className={styles.navbar}>
       <h2>I-Vent Tiket Konser</h2>
@@ -67,12 +68,22 @@ const Navbar = () => {
                 className={styles.navbar__user__profile__dropdown__item}
                 onClick={() => push("/member/profile")}
               >
+                <i className="bx bxs-user"></i>
                 Profile
               </button>
+              {data.user.role === "admin" && (
+                <button
+                  className={styles.navbar__user__profile__dropdown__item}
+                  onClick={() => push("/admin")}
+                >
+                  <i className="bx bxs-server"></i> Admin
+                </button>
+              )}
               <button
                 className={styles.navbar__user__profile__dropdown__item}
                 onClick={() => signOut()}
               >
+                <i className="bx bxs-log-out"></i>
                 Logout
               </button>
             </div>

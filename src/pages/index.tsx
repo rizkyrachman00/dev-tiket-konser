@@ -1,8 +1,20 @@
+import LandingPageView from "@/components/views/LandingPage";
+import productServices from "@/services/product";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  
+  const [products, setProducts] = useState([]);
+
+  const getAllProducts = async () => {
+    const { data } = await productServices.getAllProducts();
+    setProducts(data.data);
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+
   return (
     <>
       <Head>
@@ -12,10 +24,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Hello</h1>
-        <h1 style={{ color: "grey", padding: "90px" }}>
-          Hello Selamat datang{" "}
-        </h1>
+        <LandingPageView products={products} />
       </main>
     </>
   );
