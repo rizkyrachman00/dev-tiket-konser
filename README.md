@@ -2,7 +2,7 @@
 
 ![p5](https://github.com/user-attachments/assets/19d17f87-db56-4fce-9dcc-bace0b2c306d)
 
-![p5](https://github.com/user-attachments/assets/19d17f87-db56-4fce-9dcc-bace0b2c306d)
+![p6](https://github.com/user-attachments/assets/34cd86cb-7011-4202-80d3-3b9c97f5589d)
 
 ![p7](https://github.com/user-attachments/assets/2ccb171a-786c-4270-bf00-0b5799cfcbfb)
 
