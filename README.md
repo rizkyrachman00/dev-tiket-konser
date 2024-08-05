@@ -1,3 +1,14 @@
+![p4](https://github.com/user-attachments/assets/b17c4495-28c5-45ce-a8f8-da0d3ab5decb)
+
+![p5](https://github.com/user-attachments/assets/19d17f87-db56-4fce-9dcc-bace0b2c306d)
+
+![p5](https://github.com/user-attachments/assets/19d17f87-db56-4fce-9dcc-bace0b2c306d)
+
+![p7](https://github.com/user-attachments/assets/2ccb171a-786c-4270-bf00-0b5799cfcbfb)
+
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
