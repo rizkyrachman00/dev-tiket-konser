@@ -74,6 +74,10 @@ const LandingPageView = (props: PropTypes) => {
             ))}
           </div>
 
+          <a href="https://www.profitablecpmrate.com/hixwu1us6v?key=c1be45964cbdf8df346f11bbd103741b">
+            visit
+          </a>
+
           {/* Uncomment below to add carousel navigation arrows */}
           {/* <div className={styles.landingPage__carousel__arrows}>
             <button className={styles.landingPage__carousel__arrows__prev}>
